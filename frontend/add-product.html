@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Product</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1>Add Product</h1>
+
+<div class="container">
+
+<div class="card">
+
+<label>Name</label>
+<input id="name">
+
+<label>Base Price</label>
+<input id="basePrice" type="number">
+
+<label>Stock</label>
+<input id="stock" type="number">
+
+<label>Demand</label>
+<input id="demand" type="number">
+
+<label>Market Trend (%)</label>
+<input id="marketTrend" type="number">
+
+<label>Recent Sales</label>
+<input id="recentSales" type="number">
+
+<label>Peak Time?</label>
+<select id="peakTime">
+<option value="false">No</option>
+<option value="true">Yes</option>
+</select>
+
+<button onclick="addProduct()">Add Product</button>
+
+</div>
+
+<button onclick="location.href='index.html'">Back</button>
+
+</div>
+
+<!-- POPUP -->
+<div class="popup" id="popup">
+    <div class="popup-box">
+        <h2 id="popupTitle">Success</h2>
+        <p id="popupMessage"></p>
+        <button onclick="closePopup()">OK</button>
+    </div>
+</div>
+
+<script src="script.js"></script>
+
+<script>
+async function addProduct(){
+
+const body = {
+
+name: document.getElementById("name").value,
+basePrice: parseFloat(document.getElementById("basePrice").value),
+stock: parseInt(document.getElementById("stock").value),
+demand: parseInt(document.getElementById("demand").value),
+marketTrend: parseFloat(document.getElementById("marketTrend").value),
+recentSales: parseInt(document.getElementById("recentSales").value),
+peakTime: document.getElementById("peakTime").value === "true"
+
+};
+
+await api("http://localhost:8080/product/add","POST",body);
+
+showPopup("Success","Product Added Successfully!");
+
+}
+</script>

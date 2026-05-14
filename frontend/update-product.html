@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Product</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h1>Update Product</h1>
+
+    <div class="container">
+        <div class="card">
+            <label>Product ID</label>
+            <input id="id" type="number" placeholder="Product ID">
+
+            <label>Name</label>
+            <input id="name" placeholder="New Name">
+
+            <label>Base Price</label>
+            <input id="basePrice" type="number" placeholder="New Base Price">
+
+            <label>Stock</label>
+            <input id="stock" type="number" placeholder="New Stock">
+
+            <label>Demand</label>
+            <input id="demand" type="number" placeholder="New Demand">
+
+            <button onclick="updateProduct()">Update Product</button>
+        </div>
+
+        <button onclick="location.href='index.html'">Back to Dashboard</button>
+    </div>
+
+    <!-- POPUP -->
+    <div class="popup" id="popup">
+        <div class="popup-box">
+            <h2 id="popupTitle">Success</h2>
+            <p id="popupMessage"></p>
+            <button onclick="closePopup()">OK</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
+    <script>
+        async function updateProduct() {
+            const id = document.getElementById("id").value;
+
+            const body = {
+                name: document.getElementById("name").value,
+                basePrice: parseFloat(document.getElementById("basePrice").value),
+                stock: parseInt(document.getElementById("stock").value),
+                demand: parseInt(document.getElementById("demand").value)
+            };
+
+            await api(`http://localhost:8080/product/update/${id}`, "PUT", body);
+
+            showPopup("Success", "Product Updated Successfully!");
+        }
+
+        function closePopup() {
+            document.getElementById("popup").classList.remove("active");
+            location.href = "index.html";
+        }
+    </script>
+<script>
+    async function addProduct() {
+    const body = {
+        name: document.getElementById("name").value,
+        basePrice: parseFloat(document.getElementById("basePrice").value),
+        stock: parseInt(document.getElementById("stock").value),
+        demand: parseInt(document.getElementById("demand").value),
+        marketTrend: parseFloat(document.getElementById("marketTrend").value),
+        recentSales: parseInt(document.getElementById("recentSales").value),
+        peakTime: document.getElementById("peakTime").value === "true"
+    };
+
+    await api("http://localhost:8080/product/add", "POST", body);
+    alert("Product Added!");
+}
+</script>
+</body>
+</html>

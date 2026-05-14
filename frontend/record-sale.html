@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<title>Record Sale</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1>Record Sale</h1>
+
+<div class="container">
+
+<div class="card">
+
+<label>Select Product</label>
+<select id="productSelect" style="width:100%;padding:12px;margin-bottom:15px;"></select>
+
+<label>Quantity</label>
+<input id="quantity" type="number" placeholder="Enter quantity">
+
+<button onclick="recordSale()">Record Sale</button>
+
+</div>
+
+<button onclick="location.href='index.html'">Back</button>
+
+</div>
+
+
+<!-- POPUP -->
+
+<div class="popup" id="popup">
+<div class="popup-box">
+<h2 id="popupTitle"></h2>
+<p id="popupMessage"></p>
+<button onclick="closePopup()">OK</button>
+</div>
+</div>
+
+
+<script src="script.js"></script>
+
+<script>
+
+
+async function loadProducts(){
+
+const res = await fetch("http://localhost:8080/product/all");
+
+const products = await res.json();
+
+const select = document.getElementById("productSelect");
+
+select.innerHTML="";
+
+products.forEach(p=>{
+
+select.innerHTML += `
+<option value="${p.id}">
+${p.name} (ID: ${p.id}) - Stock: ${p.stock}
+</option>
+`;
+
+});
+
+}
+
+async function recordSale(){
+
+    const id = document.getElementById("productSelect").value;
+    const qty = document.getElementById("quantity").value;
+
+    if(!id || !qty){
+        showPopup("Error","Please select product and quantity");
+        return;
+    }
+
+    const msg = await api(
+        `http://localhost:8080/product/sale/${id}/${qty}`,
+        "POST"
+    );
+
+    // SUCCESS OR ERROR MESSAGE
+    if(msg && msg.toLowerCase().includes("success")){
+        showPopup("Success","Sale recorded successfully");
+        document.getElementById("quantity").value = "";
+    }
+    else{
+        showPopup("Error", msg);
+    }
+
+}
+
+
+window.onload = loadProducts;
+
+</script>
+
+</body>
+</html>

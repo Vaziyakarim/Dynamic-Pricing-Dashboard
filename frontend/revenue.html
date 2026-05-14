@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Total Revenue</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <h1>Total Revenue</h1>
+
+    <div class="container">
+        <div class="card" style="text-align:center;">
+
+            <h2 style="color:#d4af37;">Revenue Generated</h2>
+
+            <h1 id="revenue" style="font-size:50px; margin:20px 0; color:gold;">
+                ₹0
+            </h1>
+
+            <button onclick="loadRevenue()">Refresh</button>
+        </div>
+
+    
+        <button onclick="location.href='index.html'">Back to Dashboard</button>
+    </div>
+
+    <script src="script.js"></script>
+
+    <script>
+     
+    async function loadRevenue() {
+        let amount = await api("http://localhost:8080/product/revenue");
+
+        if (!amount || amount === 0) {
+            document.getElementById("revenue").innerText = "₹0";
+        } else {
+            document.getElementById("revenue").innerText = "₹" + amount;
+        }
+    }
+
+    loadRevenue();
+</script>
+       
+     
+        
+    
+
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html><html><head>
+<title>Sales History</title>
+<link rel="stylesheet" href="style.css">
+</head><body style="background:black;color:white;"><h1 style="text-align:center;color:gold;">Sales History</h1><div class="container"><table border="1" cellpadding="10" style="width:100%;border-collapse:collapse;text-align:center;"><thead>
+<tr style="background:gold;color:black;">
+<th>S.No</th>
+<th>Product</th>
+<th>Quantity</th>
+<th>Revenue</th>
+</tr>
+</thead><tbody id="salesBody">
+</tbody></table><br><button onclick="goBack()" style="padding:10px 20px;background:gold;border:none;font-weight:bold;">
+Back
+</button></div><script>
+
+async function loadSales(){
+
+    try{
+
+        const res = await fetch("http://localhost:8080/sales/all");
+
+        const data = await res.json();
+
+        const body = document.getElementById("salesBody");
+
+        body.innerHTML = "";
+
+        data.forEach((s,index)=>{
+
+            const row = `
+            <tr>
+                <td>${index+1}</td>
+                <td>${s.productName} (ID: ${s.productId})</td>
+                <td>${s.quantitySold}</td>
+                <td>${s.totalPrice}</td>
+            </tr>
+            `;
+
+            body.innerHTML += row;
+
+        });
+
+    }
+    catch(error){
+        console.log("Error loading sales", error);
+    }
+
+}
+
+function goBack(){
+    window.location.href = "index.html";
+}
+
+window.onload = loadSales;
+
+</script></body>
+</html>
